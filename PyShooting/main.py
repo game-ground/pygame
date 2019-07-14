@@ -10,8 +10,10 @@ file_list = os.listdir(res_path)
 
 rockImage = []
 explosionSound = []
+
+#Resource file lists
 for item in file_list:
-    if item.find('r') ==  0 :
+    if item.find('rock') ==  0 :
         rockImage.append(item)
     if item.find('explosion') != -1 and item.find('.wav') != -1:
         explosionSound.append(item)
