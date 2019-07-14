@@ -107,7 +107,7 @@ def runGame():
 
     rockX = random.randrange(0, padWidth - rockWidth)
     rockY = 0
-    rockSpeed = 5
+    rockSpeed = 10
 
     isShot = False
     shotCount = 0
