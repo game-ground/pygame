@@ -16,7 +16,8 @@ for item in file_list:
     if item.find('explosion') != -1 and item.find('.wav') != -1:
         explosionSound.append(item)
 
-
+reset= True
+Life =0
 BLACK = (0, 0, 0)
 padWidth = 480
 padHeight = 640
@@ -48,7 +49,7 @@ def writeMessage(text):
     pygame.mixer.music.stop()
     gameoverSound.play()
     sleep(2)
-    pygame.mixer.music.play(-1)
+    #pygame.mixer.music.play(-1)
     runGame()
 
 def crash():
@@ -59,9 +60,12 @@ def gameOver():
     global gamePad
     writeMessage('게임 오버!')
 
-def initGame():
-    global gamePad, clock, background, fighter, missile,explosion,missileSound,gameoverSound
 
+def initGame():
+    global gamePad, clock, background, fighter, missile,explosion,missileSound,gameoverSound, Life,reset
+
+    Life=3
+    reset= True
     pygame.init()
     gamePad = pygame.display.set_mode((padWidth, padHeight))
     pygame.display.set_caption('PyShooting')
@@ -69,25 +73,29 @@ def initGame():
     fighter = pygame.image.load('resource/fighter.png')
     missile = pygame.image.load('resource/missile.png')
     explosion = pygame.image.load('resource/explosion.png')
-    pygame.mixer.music.load('resource/music.wav')
-    pygame.mixer.music.play(-1)
+    #pygame.mixer.music.load('resource/music.wav')
+    #pygame.mixer.music.play(-1)
     missileSound = pygame.mixer.Sound('resource/missile.wav')
     gameoverSound = pygame.mixer.Sound('resource/gameover.wav')
     clock = pygame.time.Clock()
 
 
 def runGame():
-    global gamepad, clock, background, fighter, missile,explosion,missileSound,destroySound
+    global gamepad, clock, background, fighter, missile,explosion,missileSound,destroySound, quit_flag, reset, Life
 
+    print(Life)
     fighterSize = fighter.get_rect().size
     missileSize = missile.get_rect().size
-
+    
     missileHeight = missileSize[1]
     fighterWidth = fighterSize[0]
     fighterHeight = fighterSize[1]
 
     x = padWidth * 0.5
     y = padHeight - fighterHeight
+    y_sel=padWidth/3
+    quit_flag = 1
+    
     fighterX = 0
     missileXY= []
 
@@ -99,7 +107,7 @@ def runGame():
 
     rockX = random.randrange(0, padWidth - rockWidth)
     rockY = 0
-    rockSpeed = 2
+    rockSpeed = 10
 
     isShot = False
     shotCount = 0
@@ -140,8 +148,8 @@ def runGame():
             x = padWidth - fighterWidth
 
         if y < rockY + rockHeight:
-            if(rockX > x and rockX < x + fighterWidth) or \
-                    (rockX + rockWidth > x and rockX + rockWidth < x + fighterWidth):
+            if(x+fighterWidth > rockX and rockX + rockWidth > x):
+                Life=Life-1
                 crash()
 
         drawObject(fighter,x,y)
@@ -179,7 +187,9 @@ def runGame():
             rockPassed += 1
 
         if rockPassed == 3:
+            Life=Life-1
             gameOver()
+
 
         writePassed(rockPassed)
 
@@ -196,6 +206,41 @@ def runGame():
             rockY = 0
             isShot = False
 
+        if Life ==0 :
+            game_over=pygame.image.load('resource/GAME_OVER.png')
+            YorN = pygame.image.load('resource/YorN.png')
+            select =pygame.image.load('resource/Select.png')
+
+            while reset:
+                drawObject(background, 0, 0)
+                drawObject(fighter,x,y)
+                drawObject(game_over,padWidth/3, padHeight/3 )
+                drawObject(YorN,padWidth/3, padHeight/2 )
+                drawObject(select,y_sel, padHeight/2)
+                pygame.display.update() 
+                for event in pygame.event.get():
+                    if event.type in [pygame.KEYDOWN]:
+                        if event.key == pygame.K_LEFT:
+                            quit_flag=1
+                            y_sel = padWidth/3
+                            print("RIGHT 1")
+                        elif event.key == pygame.K_RIGHT:
+                            quit_flag=0
+                            y_sel = padWidth/3+120
+                            print("RIGHT 0")
+                        elif event.key == pygame.K_DOWN:
+                            if quit_flag==1:
+                                print("reset?")
+                                reset= False
+                                initGame()
+                                runGame()
+                                
+                            elif quit_flag==0:
+                                print("quit?")
+                                pygame.quit()
+                                sys.exit()
+                                
+            
         drawObject(rock, rockX, rockY)
         pygame.display.update()
         clock.tick(60)
