@@ -1,4 +1,0 @@
-# pygame
-for python
-
-OK
