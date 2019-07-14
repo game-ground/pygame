@@ -49,7 +49,7 @@ def writeMessage(text):
     pygame.mixer.music.stop()
     gameoverSound.play()
     sleep(2)
-    #pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1)
     runGame()
 
 def crash():
@@ -73,8 +73,8 @@ def initGame():
     fighter = pygame.image.load('resource/fighter.png')
     missile = pygame.image.load('resource/missile.png')
     explosion = pygame.image.load('resource/explosion.png')
-    #pygame.mixer.music.load('resource/music.wav')
-    #pygame.mixer.music.play(-1)
+    pygame.mixer.music.load('resource/music.wav')
+    pygame.mixer.music.play(-1)
     missileSound = pygame.mixer.Sound('resource/missile.wav')
     gameoverSound = pygame.mixer.Sound('resource/gameover.wav')
     clock = pygame.time.Clock()
