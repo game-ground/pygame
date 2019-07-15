@@ -81,6 +81,8 @@ def initGame():
     gameoverSound = pygame.mixer.Sound('resource/gameover.wav')
     clock = pygame.time.Clock()
 
+    missileSound.set_volume(0.3)
+
 
 def runGame():
     global gamepad, clock, background, fighter, missile,explosion,missileSound,destroySound, quit_flag, reset, Life
@@ -106,6 +108,7 @@ def runGame():
     rockWidth = rockSize[0]
     rockHeight = rockSize[1]
     destroySound = pygame.mixer.Sound('resource/'+random.choice(explosionSound))
+    destroySound.set_volume(0.3)
 
     rockX = random.randrange(0, padWidth - rockWidth)
     rockY = 0
@@ -115,7 +118,7 @@ def runGame():
     shotCount = 0
     rockPassed = 0
     onGame = False
-
+    pygame.mixer.music.set_volume(1)
     while not onGame:
         for event in pygame.event.get():
             if event.type in [pygame.QUIT]:
@@ -199,6 +202,7 @@ def runGame():
             drawObject(explosion, rockX, rockY)
             destroySound.play()
             destroySound = pygame.mixer.Sound('resource/'+random.choice(explosionSound))
+            destroySound.set_volume(0.3)
             rock = pygame.image.load('resource/'+random.choice(rockImage))
 
             rockSize = rock.get_rect().size
@@ -212,7 +216,7 @@ def runGame():
             game_over=pygame.image.load('resource/GAME_OVER.png')
             YorN = pygame.image.load('resource/YorN.png')
             select =pygame.image.load('resource/Select.png')
-
+            pygame.mixer.music.set_volume(0.3)
             while reset:
                 drawObject(background, 0, 0)
                 drawObject(fighter,x,y)
