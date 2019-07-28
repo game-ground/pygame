@@ -85,7 +85,7 @@ def initGame():
 
 
 def runGame():
-    global gamepad, clock, background, fighter, missile,explosion,missileSound,destroySound, quit_flag, reset, Life
+    global clock, background, fighter, missile,explosion,missileSound,destroySound, quit_flag, reset, Life
 
     print(Life)
     fighterSize = fighter.get_rect().size
